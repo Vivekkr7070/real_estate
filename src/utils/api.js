@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 
 export const api = axios.create({
-  baseURL: "https://realestate-s9k7.onrender.com",
+  baseURL: VITE_AUTH_AUDIENCE,
 });
 
 export const getAllProperties = async () => {
