@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 
 export const api = axios.create({
-  baseURL: VITE_AUTH_AUDIENCE,
+  baseURL: import.meta.env.VITE_AUTH_AUDIENCE,
 });
 
 export const getAllProperties = async () => {
