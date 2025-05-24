@@ -11,10 +11,11 @@ import useBookings from "../../hooks/useBookings";
 
 const Layout = () => {
 
-  useFavourites()
-  useBookings()
+  // useFavourites()
+  // useBookings()
 
-  const { isAuthenticated, user, getAccessTokenWithPopup } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenWithPopup, getAccessTokenSilently } = useAuth0();
+  // console.log("🚀 ~ Layout ~ user:", user?.email)
   const { setUserDetails } = useContext(UserDetailContext);
 
   const { mutate } = useMutation({
@@ -24,16 +25,21 @@ const Layout = () => {
 
   useEffect(() => {
     const getTokenAndRegsiter = async () => {
+      const token = await getAccessTokenSilently();
+      // console.log("🚀 ~ getTokenAndRegsiter ~ token:", token)
 
-      const res = await getAccessTokenWithPopup({
-        authorizationParams: {
-          audience: "http://localhost:8000",
-          scope: "openid profile email",
-        },
-      });
-      localStorage.setItem("access_token", res);
-      setUserDetails((prev) => ({ ...prev, token: res }));
-      mutate(res)
+      // const res = await getAccessTokenWithPopup({
+      //   authorizationParams: {
+      //     audience: "http://localhost:8000",
+      //     scope: "openid profile email",
+      //   },
+      // });
+      localStorage.setItem("access_token", token);
+      setUserDetails((prev) => ({
+        ...prev,
+        token: token,
+        email: user?.email,
+      }));
     };
 
 

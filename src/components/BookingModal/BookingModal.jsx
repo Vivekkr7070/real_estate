@@ -6,12 +6,14 @@ import UserDetailContext from "../../context/UserDetailContext.js";
 import { bookVisit } from "../../utils/api.js";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
-const BookingModal = ({ opened, setOpened, email, propertyId }) => {
+const BookingModal = ({ opened, setOpened,propertyId }) => {
+  console.log("🚀 ~ BookingModal ~ email:", email)
   const [value, setValue] = useState(null);
   const {
-    userDetails: { token },
+    userDetails: { token, email },
     setUserDetails,
   } = useContext(UserDetailContext);
+  console.log("🚀 ~ BookingModal ~ email:", email);
 
   const handleBookingSuccess = () => {
     toast.success("You have booked your visit", {
@@ -43,7 +45,7 @@ const BookingModal = ({ opened, setOpened, email, propertyId }) => {
       title="Select your date of visit"
       centered
     >
-      <div className="flexColCenter" style={{gap: "1rem"}}>
+      <div className="flexColCenter" style={{ gap: "1rem" }}>
         <DatePicker value={value} onChange={setValue} minDate={new Date()} />
         <Button disabled={!value || isLoading} onClick={() => mutate()}>
           Book visit

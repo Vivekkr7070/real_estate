@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Button, Group, NumberInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React, { useContext } from "react";
@@ -41,19 +40,22 @@ const Facilities = ({
   };
 
   // ==================== upload logic
-  const { user } = useAuth0();
+
+
   const {
-    userDetails: { token },
+    userDetails: { token, email },
   } = useContext(UserDetailContext);
+  console.log("🚀 ~ Facilities ~ email:", email)
+
   const { refetch: refetchProperties } = useProperties();
 
-  const {mutate, isLoading} = useMutation({
-    mutationFn: ()=> createResidency({
-        ...propertyDetails, facilities: {bedrooms, parkings , bathrooms},
+  const { mutate, isLoading } = useMutation({
+    mutationFn: () => createResidency({
+      ...propertyDetails, userEmail: email, facilities: { bedrooms, parkings, bathrooms },
     }, token),
-    onError: ({ response }) => toast.error(response.data.message, {position: "bottom-right"}),
-    onSettled: ()=> {
-      toast.success("Added Successfully", {position: "bottom-right"});
+    onError: ({ response }) => toast.error(response.data.message, { position: "bottom-right" }),
+    onSettled: () => {
+      toast.success("Added Successfully", { position: "bottom-right" });
       setPropertyDetails({
         title: "",
         description: "",
@@ -67,7 +69,7 @@ const Facilities = ({
           parkings: 0,
           bathrooms: 0,
         },
-        userEmail: user?.email,
+        userEmail: email || "unknown@example.com",
       })
       setOpened(false)
       setActiveStep(0)

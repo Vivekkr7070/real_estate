@@ -1,7 +1,6 @@
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
-
 import Website from "./pages/Website";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Properties from "./pages/Properties/Properties";
@@ -13,17 +12,23 @@ import Property from "./pages/Property/Property";
 import UserDetailContext from "./context/UserDetailContext";
 import Bookings from "./pages/Bookings/Bookings";
 import Favourites from "./pages/Favourites/Favourites";
+import { useAuth0 } from "@auth0/auth0-react";
 
 
-
+function App() {
+  const queryClient = new QueryClient();
+  const { getAccessTokenSilently } = useAuth0()
   // const { userDetails } = useContext(UserDetailContext);
   // // Log the token for debugging
   // console.log("User Token:", userDetails.token);
 
-function App() {
-  const queryClient = new QueryClient();
-  console.log("🚀 ~ App ~ queryClient:", queryClient)
-  
+  useEffect(() => {
+    const getTokenAndRegsiter = async () => {
+      const token = await getAccessTokenSilently();
+      // console.log("🚀 ~ token:", token)
+    }
+    getTokenAndRegsiter()
+  }, [])
 
   const [userDetails, setUserDetails] = useState({
     favourites: [],

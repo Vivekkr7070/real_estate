@@ -5,18 +5,17 @@ import { getProperty, removeBooking } from "../../utils/api";
 import { PuffLoader } from "react-spinners";
 import { AiFillHeart } from "react-icons/ai";
 import "./Property.css";
-
 import { FaShower } from "react-icons/fa";
 import { AiTwotoneCar } from "react-icons/ai";
 import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import Map from "../../components/Map/Map";
 import useAuthCheck from "../../hooks/useAuthCheck";
-import { useAuth0 } from "@auth0/auth0-react";
 import BookingModal from "../../components/BookingModal/BookingModal";
 import UserDetailContext from "../../context/UserDetailContext.js";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
+
 const Property = () => {
   const { pathname } = useLocation();
   const id = pathname.split("/").slice(-1)[0];
@@ -26,15 +25,14 @@ const Property = () => {
 
   const [modalOpened, setModalOpened] = useState(false);
   const { validateLogin } = useAuthCheck();
-  const { user } = useAuth0();
-
   const {
-    userDetails: { token, bookings },
+    userDetails: { token, bookings, email },
     setUserDetails,
   } = useContext(UserDetailContext);
 
+
   const { mutate: cancelBooking, isLoading: cancelling } = useMutation({
-    mutationFn: () => removeBooking(id, user?.email, token),
+    mutationFn: () => removeBooking(id, email, token),
     onSuccess: () => {
       setUserDetails((prev) => ({
         ...prev,
@@ -70,7 +68,7 @@ const Property = () => {
       <div className="flexColStart paddings innerWidth property-container">
         {/* like button */}
         <div className="like">
-          <Heart id={id}/>
+          <Heart id={id} />
         </div>
 
         {/* image */}
@@ -157,7 +155,6 @@ const Property = () => {
               opened={modalOpened}
               setOpened={setModalOpened}
               propertyId={id}
-              email={user?.email}
             />
           </div>
 
